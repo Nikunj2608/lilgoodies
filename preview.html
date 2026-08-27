@@ -12,7 +12,7 @@
     <!-- Landing: Box View -->
     <div class="landing-view" id="landingView">
         <h1 class="mail-title">you've got mail</h1>
-        <div class="package-box" id="packageBox" onclick="openPackage()">
+        <div class="package-box" id="packageBox" role="button" tabindex="0" aria-label="Open your care package" onclick="openPackage()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPackage();}">
             <div class="box-top" id="boxTop">
                 <div class="tape"></div>
             </div>

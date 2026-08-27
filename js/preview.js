@@ -113,20 +113,27 @@ function populateGoodies() {
         return;
     }
     
-    const iconMap = {
-        note: '🖨️',
-        song: '💿',
-        video: '🎥',
-        gift: '🎀',
-        voice: '🎙️',
-        location: '🗺️',
-        coupon: '🎟️',
-        news: '📰'
+    const itemIconSrc = {
+        note: 'note.png',
+        song: 'song.png',
+        video: 'video.png',
+        gift: 'gift.png',
+        voice: 'voice.png',
+        location: 'map.png',
+        coupon: 'coupon.png',
+        news: 'news.png'
     };
-    
+
+    function iconMarkup(type) {
+        const src = itemIconSrc[type];
+        return src ? `<img src="${src}" alt="" aria-hidden="true">` : '📦';
+    }
+
     previewData.items.forEach((item, index) => {
         const el = document.createElement('div');
         el.className = 'goodie-item';
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
         el.style.animationDelay = `${0.1 + index * 0.15}s`;
         el.style.opacity = '0';
         el.style.animation = `bounceIn 0.6s ease-out ${0.1 + index * 0.15}s forwards`;
@@ -148,56 +155,56 @@ function populateGoodies() {
                 break;
             case 'note':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.note}</div>
+                    <div class="goodie-item-icon">${iconMarkup('note')}</div>
                     <span class="goodie-item-label">Note</span>
                 `;
                 el.onclick = () => showNoteDetail(item);
                 break;
             case 'voice':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.voice}</div>
+                    <div class="goodie-item-icon">${iconMarkup('voice')}</div>
                     <span class="goodie-item-label">Voice</span>
                 `;
                 el.onclick = () => showVoicePlayer(item);
                 break;
             case 'song':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.song}</div>
+                    <div class="goodie-item-icon">${iconMarkup('song')}</div>
                     <span class="goodie-item-label">${item.title || 'Song'}</span>
                 `;
                 el.onclick = () => window.open(item.link, '_blank');
                 break;
             case 'video':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.video}</div>
+                    <div class="goodie-item-icon">${iconMarkup('video')}</div>
                     <span class="goodie-item-label">${item.title || 'Video'}</span>
                 `;
                 el.onclick = () => window.open(item.link, '_blank');
                 break;
             case 'gift':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.gift}</div>
+                    <div class="goodie-item-icon">${iconMarkup('gift')}</div>
                     <span class="goodie-item-label">${item.desc || 'Gift'}</span>
                 `;
                 el.onclick = () => window.open(item.link, '_blank');
                 break;
             case 'coupon':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.coupon}</div>
+                    <div class="goodie-item-icon">${iconMarkup('coupon')}</div>
                     <span class="goodie-item-label">Coupon</span>
                 `;
                 el.onclick = () => showCouponDetail(item);
                 break;
             case 'news':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.news}</div>
+                    <div class="goodie-item-icon">${iconMarkup('news')}</div>
                     <span class="goodie-item-label">News</span>
                 `;
                 el.onclick = () => showNewsDetail(item);
                 break;
             case 'location':
                 el.innerHTML = `
-                    <div class="goodie-item-icon">${iconMap.location}</div>
+                    <div class="goodie-item-icon">${iconMarkup('location')}</div>
                     <span class="goodie-item-label">${item.name || 'Location'}</span>
                 `;
                 el.onclick = () => showLocationDetail(item);
@@ -209,6 +216,14 @@ function populateGoodies() {
                 `;
         }
         
+        el.setAttribute('aria-label', `Open ${item.type}`);
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                el.onclick && el.onclick();
+            }
+        });
+
         container.appendChild(el);
     });
 }

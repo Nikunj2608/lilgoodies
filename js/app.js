@@ -19,7 +19,7 @@ let adminSettings = {
     packageLog: []
 };
 
-// Icon map for cart display
+// Icon map for cart display (fallback emoji, used only if image fails)
 const iconMap = {
     note: '🖨️',
     photo: '📷',
@@ -32,6 +32,41 @@ const iconMap = {
     coupon: '🎟️',
     news: '📰'
 };
+
+// Real illustration icons that match the item-selection grid
+const itemIconSrc = {
+    note: 'note.png',
+    photo: 'photo.png',
+    song: 'song.png',
+    video: 'video.png',
+    gift: 'gift.png',
+    voice: 'voice.png',
+    drawing: 'drawing.png',
+    location: 'map.png',
+    coupon: 'coupon.png',
+    news: 'news.png'
+};
+
+function iconMarkup(type, size) {
+    const src = itemIconSrc[type];
+    const dimension = size || 28;
+    if (src) {
+        return `<img class="type-icon" src="${src}" alt="" aria-hidden="true" style="width:${dimension}px;height:${dimension}px;object-fit:contain;">`;
+    }
+    return `<span class="type-icon-emoji">${iconMap[type] || '📦'}</span>`;
+}
+
+// ========== FLOW STEP INDICATOR ==========
+function updateFlowSteps(stage) {
+    const steps = document.querySelectorAll('.flow-step');
+    if (!steps.length) return;
+    // stage: 1 = composing, 2 = has items / ready to preview, 3 = package sent
+    steps.forEach((step, index) => {
+        const stepNum = index + 1;
+        step.classList.toggle('is-done', stepNum < stage);
+        step.classList.toggle('is-active', stepNum === stage);
+    });
+}
 
 // ========== TOAST NOTIFICATION ==========
 function showToast(message) {
@@ -89,6 +124,10 @@ function openCheckoutModal() {
     if (couponFeedback) couponFeedback.style.display = 'none';
     const payButton = document.getElementById('payButton');
     if (payButton) payButton.textContent = `Pay ₹${packageData.amount}`;
+    const paymentAmount = document.getElementById('paymentAmount');
+    if (paymentAmount) paymentAmount.textContent = `₹${packageData.amount}`;
+    const paymentMethods = document.getElementById('paymentMethods');
+    if (paymentMethods) paymentMethods.style.display = 'flex';
     document.getElementById('paymentForm').style.display = 'block';
     renderUpiQrCode();
     document.getElementById('paymentModal').classList.add('active');
@@ -328,12 +367,12 @@ function updateCart() {
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
-            <span class="cart-item-icon">${iconMap[item.type]}</span>
+            <span class="cart-item-icon">${iconMarkup(item.type, 30)}</span>
             <div class="cart-item-info">
                 <div class="cart-item-type">${item.type}</div>
                 <div class="cart-item-desc">${item.description || ''}</div>
             </div>
-            <button class="btn-remove" onclick="removeItem(${item.id})">remove</button>
+            <button class="btn-remove" onclick="removeItem(${item.id})" aria-label="Remove ${item.type} from package">remove</button>
         `;
         cartItems.appendChild(cartItem);
     });
@@ -341,6 +380,18 @@ function updateCart() {
     // Save to localStorage
     renderLivePreview();
     savePackage();
+    updateFlowSteps(packageData.items.length > 0 ? 2 : 1);
+    updateMobileStickyBar();
+}
+
+function updateMobileStickyBar() {
+    const bar = document.getElementById('mobileStickyBar');
+    const count = document.getElementById('mobileStickyCount');
+    if (!bar || !count) return;
+    const n = (packageData.items || []).length;
+    bar.classList.toggle('active', n > 0);
+    bar.setAttribute('aria-hidden', n > 0 ? 'false' : 'true');
+    count.textContent = `${n} ${n === 1 ? 'goodie' : 'goodies'} added`;
 }
 
 function renderLivePreview() {
@@ -360,7 +411,7 @@ function renderLivePreview() {
     panel.classList.add('active');
     count.textContent = `${packageData.items.length} ${packageData.items.length === 1 ? 'goodie' : 'goodies'}`;
     grid.innerHTML = packageData.items.map((item) => {
-        let previewMarkup = `<div class="preview-thumb preview-icon">${iconMap[item.type] || '📦'}</div>`;
+        let previewMarkup = `<div class="preview-thumb preview-icon">${iconMarkup(item.type, 34)}</div>`;
 
         if (item.type === 'photo' && item.src) {
             previewMarkup = `<img class="preview-thumb preview-image" src="${item.src}" alt="${item.description || 'Photo'}">`;
@@ -857,9 +908,14 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
         const previewUrl = new URL(remotePackage.url, window.location.href);
         document.getElementById('generatedLink').value = previewUrl.href;
         openModalById('linkModal');
+        updateFlowSteps(4);
         return;
     } catch (error) {
         console.warn('Remote package storage unavailable; using local preview:', error);
+        if (window.location.protocol !== 'file:') {
+            showToast('Package service is unavailable. Please try again shortly.');
+            return;
+        }
     }
 
     try {
@@ -903,6 +959,8 @@ async function applyCoupon() {
         feedback.style.color = 'var(--postal-red)';
         feedback.style.display = 'block';
         document.getElementById('payButton').textContent = 'Generate free package';
+        document.getElementById('paymentAmount').textContent = 'FREE';
+        document.getElementById('paymentMethods').style.display = 'none';
         document.getElementById('paymentForm').style.display = 'none';
         document.getElementById('upiQrPanel').style.display = 'none';
         input.dataset.valid = 'true';
@@ -911,6 +969,11 @@ async function applyCoupon() {
         feedback.textContent = error.message;
         feedback.style.color = 'var(--destructive)';
         feedback.style.display = 'block';
+        packageData.amount = adminSettings.packagePrice || 899;
+        document.getElementById('paymentAmount').textContent = `₹${packageData.amount}`;
+        document.getElementById('paymentMethods').style.display = 'flex';
+        document.getElementById('paymentForm').style.display = 'block';
+        document.getElementById('payButton').textContent = `Pay ₹${packageData.amount}`;
     }
 }
 
@@ -1011,6 +1074,7 @@ function previewPackage() {
     }
     
     savePackage();
+    updateFlowSteps(3);
     const previewUrl = new URL('preview.html', window.location.href);
     previewUrl.searchParams.set('preview', 'true');
     window.open(previewUrl.href, '_blank');
@@ -1023,6 +1087,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderLivePreview();
     renderUpiQrCode();
     renderAdminDashboard();
+    updateFlowSteps(packageData.items && packageData.items.length > 0 ? 2 : 1);
+    updateMobileStickyBar();
     
     const toField = document.getElementById('toField');
     const fromField = document.getElementById('fromField');

@@ -38,6 +38,13 @@
         <!-- Right Side: Items Selection & Cart -->
         <div class="right-panel">
             <div class="goodies-sheet">
+                <nav class="flow-steps" aria-label="Package progress">
+                    <span class="flow-step is-active">1. Compose</span>
+                    <span class="flow-step-sep">→</span>
+                    <span class="flow-step">2. Preview</span>
+                    <span class="flow-step-sep">→</span>
+                    <span class="flow-step">3. Send</span>
+                </nav>
                 <h1 class="goodies-title">A LITTLE BOX OF GOODIES</h1>
                 <p class="goodies-subtitle">est. for sending a little care</p>
                 <div class="things-stamp">things to tuck inside</div>
@@ -50,44 +57,44 @@
                 <div class="items-divider"></div>
 
                 <div class="items-grid">
-                    <div class="item-card" data-type="note" onclick="openModal('note')">
-                        <div class="item-icon">🖨️</div>
+                    <div class="item-card" data-type="note" role="button" tabindex="0" aria-label="Add note" onclick="openModal('note')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('note');}">
+                        <img class="item-icon" src="note.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Note</span>
                     </div>
-                    <div class="item-card" data-type="photo" onclick="openModal('photo')">
-                        <div class="item-icon">📷</div>
+                    <div class="item-card" data-type="photo" role="button" tabindex="0" aria-label="Add photo" onclick="openModal('photo')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('photo');}">
+                        <img class="item-icon" src="photo.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Photo</span>
                     </div>
-                    <div class="item-card" data-type="song" onclick="openModal('song')">
-                        <div class="item-icon">💿</div>
+                    <div class="item-card" data-type="song" role="button" tabindex="0" aria-label="Add song" onclick="openModal('song')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('song');}">
+                        <img class="item-icon" src="song.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Song</span>
                     </div>
-                    <div class="item-card" data-type="video" onclick="openModal('video')">
-                        <div class="item-icon">🎥</div>
+                    <div class="item-card" data-type="video" role="button" tabindex="0" aria-label="Add video" onclick="openModal('video')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('video');}">
+                        <img class="item-icon" src="video.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Video</span>
                     </div>
-                    <div class="item-card" data-type="gift" onclick="openModal('gift')">
-                        <div class="item-icon">🎀</div>
+                    <div class="item-card" data-type="gift" role="button" tabindex="0" aria-label="Add gift" onclick="openModal('gift')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('gift');}">
+                        <img class="item-icon" src="gift.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Gift</span>
                     </div>
-                    <div class="item-card" data-type="voice" onclick="openModal('voice')">
-                        <div class="item-icon">🎙️</div>
+                    <div class="item-card" data-type="voice" role="button" tabindex="0" aria-label="Add voice" onclick="openModal('voice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('voice');}">
+                        <img class="item-icon" src="voice.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Voice</span>
                     </div>
-                    <div class="item-card" data-type="drawing" onclick="openModal('drawing')">
-                        <div class="item-icon">✏️</div>
+                    <div class="item-card" data-type="drawing" role="button" tabindex="0" aria-label="Add drawing" onclick="openModal('drawing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('drawing');}">
+                        <img class="item-icon" src="drawing.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Drawing</span>
                     </div>
-                    <div class="item-card" data-type="location" onclick="openModal('location')">
-                        <div class="item-icon">🗺️</div>
+                    <div class="item-card" data-type="location" role="button" tabindex="0" aria-label="Add location" onclick="openModal('location')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('location');}">
+                        <img class="item-icon" src="map.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Location</span>
                     </div>
-                    <div class="item-card" data-type="coupon" onclick="openModal('coupon')">
-                        <div class="item-icon">🎟️</div>
+                    <div class="item-card" data-type="coupon" role="button" tabindex="0" aria-label="Add coupon" onclick="openModal('coupon')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('coupon');}">
+                        <img class="item-icon" src="coupon.png" alt="" aria-hidden="true">
                         <span class="item-label">+ Coupon</span>
                     </div>
-                    <div class="item-card" data-type="news" onclick="openModal('news')">
-                        <div class="item-icon">📰</div>
+                    <div class="item-card" data-type="news" role="button" tabindex="0" aria-label="Add news" onclick="openModal('news')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('news');}">
+                        <img class="item-icon" src="news.png" alt="" aria-hidden="true">
                         <span class="item-label">+ News</span>
                     </div>
                 </div>
@@ -136,6 +143,12 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Mobile sticky action bar -->
+    <div class="mobile-sticky-bar" id="mobileStickyBar" aria-hidden="true">
+        <span class="mobile-sticky-count" id="mobileStickyCount">0 goodies added</span>
+        <button class="btn-generate mobile-sticky-btn" onclick="generateLink()">Send package</button>
     </div>
 
     <!-- MODALS -->
@@ -324,9 +337,9 @@
             <h3 class="modal-title">SECURE CHECKOUT</h3>
             <div class="payment-summary">
                 <span>Digital care package</span>
-                <strong>₹899</strong>
+                <strong id="paymentAmount">₹899</strong>
             </div>
-            <div class="payment-methods">
+            <div class="payment-methods" id="paymentMethods">
                 <label class="payment-option">
                     <input type="radio" name="paymentMethod" value="card" checked>
                     <span>Card</span>
@@ -344,7 +357,7 @@
                 <label class="modal-label" for="couponCode">Have a free coupon?</label>
                 <div class="link-display">
                     <input type="text" id="couponCode" class="modal-input" placeholder="Enter coupon code" autocomplete="off">
-                    <button type="button" class="btn-preview" onclick="applyCoupon()">Apply</button>
+                    <button type="button" class="btn-preview coupon-apply" onclick="applyCoupon()">Apply</button>
                 </div>
                 <p class="copy-feedback" id="couponFeedback" style="display:none;"></p>
             </div>

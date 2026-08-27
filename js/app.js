@@ -478,7 +478,9 @@ async function startRecording() {
             const audioUrl = URL.createObjectURL(voiceBlob);
             const playback = document.getElementById('voicePlayback');
             playback.src = audioUrl;
-            document.getElementById('recordingStatus').textContent = 'Recording saved ✓';
+            playback.style.display = 'block';
+            document.getElementById('voicePreviewHint').style.display = 'block';
+            document.getElementById('recordingStatus').textContent = 'Recording ready - preview it before adding';
             stream.getTracks().forEach(track => track.stop());
         };
         
@@ -521,6 +523,7 @@ function handleAudioUpload(event) {
         const playback = document.getElementById('voicePlayback');
         playback.src = audioUrl;
         playback.style.display = 'block';
+        document.getElementById('voicePreviewHint').style.display = 'block';
         document.getElementById('recordingStatus').textContent = `Uploaded: ${file.name}`;
     };
     reader.readAsDataURL(file);
@@ -797,6 +800,8 @@ function resetVoiceInput() {
         playback.src = '';
         playback.style.display = 'none';
     }
+    const previewHint = document.getElementById('voicePreviewHint');
+    if (previewHint) previewHint.style.display = 'none';
     const status = document.getElementById('recordingStatus');
     if (status) status.textContent = 'Not recorded yet';
 }

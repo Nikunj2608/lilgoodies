@@ -253,7 +253,8 @@
                 </label>
             </div>
             <span class="recording-status" id="recordingStatus">Not recorded yet</span>
-            <audio id="voicePlayback" controls style="display:none; width:100%; margin-top:12px;"></audio>
+            <p class="voice-preview-hint" id="voicePreviewHint" style="display:none;">Preview your voice memo before adding it.</p>
+            <audio id="voicePlayback" controls aria-label="Preview voice memo" style="display:none; width:100%; margin-top:12px;"></audio>
             <div class="modal-actions">
                 <button class="btn-add" onclick="addItem('voice')">Add to package</button>
                 <button class="btn-cancel" onclick="closeModal('voiceModal')">Cancel</button>

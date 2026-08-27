@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Care Package - A Little Box of Goodies</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+</head>
+<body class="creator-page">
+    <div class="main-container">
+        <!-- Left Side: Shipping Label -->
+        <div class="left-panel">
+            <div class="shipping-label" id="shippingLabel">
+                <div class="label-header">DIGITAL CARE PACKAGE</div>
+                <div class="label-body">
+                    <div class="label-row to-row">
+                        <span class="label-field">TO:</span>
+                        <input type="text" id="toField" class="label-input" placeholder="recipient name" value="">
+                        <div class="stamp">
+                            <span>to be delivered with</span>
+                            <span>care and love</span>
+                        </div>
+                    </div>
+                    <div class="label-divider"></div>
+                    <div class="label-row from-row">
+                        <span class="label-field">FROM:</span>
+                        <input type="text" id="fromField" class="label-input" placeholder="your name" value="">
+                    </div>
+                    <div class="barcode">
+                        <div class="barcode-lines"></div>
+                        <span class="barcode-number">9405 5118 9956 1891 2345 67</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Items Selection & Cart -->
+        <div class="right-panel">
+            <div class="goodies-sheet">
+                <h1 class="goodies-title">A LITTLE BOX OF GOODIES</h1>
+                <p class="goodies-subtitle">est. for sending a little care</p>
+                <div class="things-stamp">things to tuck inside</div>
+                <h2 class="select-items">*** SELECT ITEMS TO TUCK ***</h2>
+                
+                <div class="items-header">
+                    <span>ITEM</span>
+                    <span>ADD</span>
+                </div>
+                <div class="items-divider"></div>
+
+                <div class="items-grid">
+                    <div class="item-card" data-type="note" onclick="openModal('note')">
+                        <div class="item-icon">🖨️</div>
+                        <span class="item-label">+ Note</span>
+                    </div>
+                    <div class="item-card" data-type="photo" onclick="openModal('photo')">
+                        <div class="item-icon">📷</div>
+                        <span class="item-label">+ Photo</span>
+                    </div>
+                    <div class="item-card" data-type="song" onclick="openModal('song')">
+                        <div class="item-icon">💿</div>
+                        <span class="item-label">+ Song</span>
+                    </div>
+                    <div class="item-card" data-type="video" onclick="openModal('video')">
+                        <div class="item-icon">🎥</div>
+                        <span class="item-label">+ Video</span>
+                    </div>
+                    <div class="item-card" data-type="gift" onclick="openModal('gift')">
+                        <div class="item-icon">🎀</div>
+                        <span class="item-label">+ Gift</span>
+                    </div>
+                    <div class="item-card" data-type="voice" onclick="openModal('voice')">
+                        <div class="item-icon">🎙️</div>
+                        <span class="item-label">+ Voice</span>
+                    </div>
+                    <div class="item-card" data-type="drawing" onclick="openModal('drawing')">
+                        <div class="item-icon">✏️</div>
+                        <span class="item-label">+ Drawing</span>
+                    </div>
+                    <div class="item-card" data-type="location" onclick="openModal('location')">
+                        <div class="item-icon">🗺️</div>
+                        <span class="item-label">+ Location</span>
+                    </div>
+                    <div class="item-card" data-type="coupon" onclick="openModal('coupon')">
+                        <div class="item-icon">🎟️</div>
+                        <span class="item-label">+ Coupon</span>
+                    </div>
+                    <div class="item-card" data-type="news" onclick="openModal('news')">
+                        <div class="item-icon">📰</div>
+                        <span class="item-label">+ News</span>
+                    </div>
+                </div>
+
+                <div class="live-preview-panel" id="livePreviewPanel" aria-live="polite">
+                    <div class="live-preview-header">
+                        <span>Live preview</span>
+                        <span class="live-preview-count" id="livePreviewCount">0 goodies</span>
+                    </div>
+                    <div class="live-preview-grid" id="livePreviewGrid"></div>
+                </div>
+
+                <!-- Cart Section -->
+                <div class="cart-section" id="cartSection" style="display:none;">
+                    <div class="cart-header">
+                        <span>IN CART</span>
+                        <span>QTY</span>
+                    </div>
+                    <div class="cart-divider"></div>
+                    <div class="cart-items" id="cartItems"></div>
+                </div>
+
+                <!-- Bottom Section -->
+                <div class="bottom-section">
+                    <div class="barcode-bottom">
+                        <div class="barcode-lines"></div>
+                    </div>
+                    <p class="thank-you">THANK YOU FOR CARING</p>
+                    <p class="nice-day">have a nice day :)</p>
+                </div>
+
+                <!-- Checkout Section -->
+                <div class="checkout-section">
+                    <h2 class="checkout-title">A LITTLE BOX OF GOODIES</h2>
+                    <p class="checkout-subtitle">checkout · share your parcel</p>
+                    <div class="send-stamp">send your package</div>
+                    <p class="pay-text">*** PAY · THEN GET YOUR LINK ***</p>
+                    <div class="checkout-actions">
+                        <button class="btn-generate" onclick="generateLink()">Pay & Generate Link</button>
+                        <button class="btn-preview" onclick="previewPackage()">Preview</button>
+                    </div>
+                    <div class="barcode-bottom">
+                        <div class="barcode-lines"></div>
+                    </div>
+                    <p class="send-special">send it to someone special</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Note Modal -->
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('noteModal')">✕</button>
+            <h3 class="modal-title">ADD NOTE</h3>
+            <label class="modal-label">Your message</label>
+            <textarea id="noteText" class="modal-textarea" placeholder="Write your note here..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('note')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('noteModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Modal -->
+    <div class="modal-overlay" id="photoModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('photoModal')">✕</button>
+            <h3 class="modal-title">ADD PHOTO</h3>
+            <label class="modal-label">Upload photo</label>
+            <div class="file-upload-area" id="photoUploadArea">
+                <input type="file" id="photoFile" accept="image/*" onchange="handlePhotoUpload(event)">
+                <p>Click or drag to upload</p>
+            </div>
+            <div class="photo-preview-container" id="photoPreviewContainer" style="display:none;">
+                <img id="photoPreview" class="photo-preview" alt="Preview">
+            </div>
+            <label class="modal-label">Caption</label>
+            <input type="text" id="photoCaption" class="modal-input" placeholder="Add a caption (optional)">
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('photo')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('photoModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Song Modal -->
+    <div class="modal-overlay" id="songModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('songModal')">✕</button>
+            <h3 class="modal-title">ADD SONG</h3>
+            <label class="modal-label">Song link (Spotify, Apple Music, YouTube Music...)</label>
+            <input type="url" id="songLink" class="modal-input" placeholder="https://open.spotify.com/track/...">
+            <label class="modal-label">Title</label>
+            <input type="text" id="songTitle" class="modal-input" placeholder="song title (optional)">
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('song')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('songModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('videoModal')">✕</button>
+            <h3 class="modal-title">ADD VIDEO</h3>
+            <label class="modal-label">Video link (YouTube, Vimeo...)</label>
+            <input type="url" id="videoLink" class="modal-input" placeholder="https://youtube.com/watch?v=...">
+            <label class="modal-label">Title</label>
+            <input type="text" id="videoTitle" class="modal-input" placeholder="video title (optional)">
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('video')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('videoModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gift Modal -->
+    <div class="modal-overlay" id="giftModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('giftModal')">✕</button>
+            <h3 class="modal-title">ADD GIFT</h3>
+            <label class="modal-label">Gift link (Amazon, Etsy...)</label>
+            <input type="url" id="giftLink" class="modal-input" placeholder="https://...">
+            <label class="modal-label">Description</label>
+            <input type="text" id="giftDesc" class="modal-input" placeholder="gift description (optional)">
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('gift')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('giftModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Modal -->
+    <div class="modal-overlay" id="voiceModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('voiceModal')">✕</button>
+            <h3 class="modal-title">ADD VOICE</h3>
+            <label class="modal-label">Voice memo</label>
+            <div class="voice-waveform" id="voiceWaveform">
+                <canvas id="waveformCanvas" width="400" height="60"></canvas>
+            </div>
+            <div class="voice-controls">
+                <button class="btn-record" id="recordBtn" onclick="toggleRecording()">Record</button>
+                <label class="upload-audio-btn">
+                    <input type="file" id="audioFile" accept="audio/*" onchange="handleAudioUpload(event)">
+                    <span>Upload audio</span>
+                </label>
+            </div>
+            <span class="recording-status" id="recordingStatus">Not recorded yet</span>
+            <audio id="voicePlayback" controls style="display:none; width:100%; margin-top:12px;"></audio>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('voice')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('voiceModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drawing Modal -->
+    <div class="modal-overlay" id="drawingModal">
+        <div class="modal modal-large animate-in">
+            <button class="modal-close" onclick="closeModal('drawingModal')">✕</button>
+            <h3 class="modal-title">ADD DRAWING</h3>
+            <label class="modal-label">Draw something</label>
+            <div class="drawing-tools">
+                <input type="color" id="drawColor" value="#8B4513" class="color-picker">
+                <input type="range" id="drawSize" min="1" max="20" value="3" class="size-slider">
+                <button class="btn-clear-canvas" onclick="clearCanvas()">Clear</button>
+            </div>
+            <canvas id="drawingCanvas" class="drawing-canvas" width="500" height="350"></canvas>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('drawing')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('drawingModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div class="modal-overlay" id="locationModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('locationModal')">✕</button>
+            <h3 class="modal-title">ADD LOCATION</h3>
+            <label class="modal-label">Place name</label>
+            <input type="text" id="locationName" class="modal-input" placeholder="e.g., Our favorite coffee shop">
+            <label class="modal-label">Address or Google Maps link</label>
+            <input type="text" id="locationAddress" class="modal-input" placeholder="123 Main St or https://maps.google.com/...">
+            <label class="modal-label">Note</label>
+            <input type="text" id="locationNote" class="modal-input" placeholder="Why this place is special (optional)">
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('location')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('locationModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coupon Modal -->
+    <div class="modal-overlay" id="couponModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('couponModal')">✕</button>
+            <h3 class="modal-title">ADD COUPON</h3>
+            <label class="modal-label">Coupon title</label>
+            <input type="text" id="couponTitle" class="modal-input" placeholder="e.g., Free hug coupon">
+            <label class="modal-label">Description</label>
+            <textarea id="couponDesc" class="modal-textarea" placeholder="Coupon details..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('coupon')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('couponModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Modal -->
+    <div class="modal-overlay" id="newsModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('newsModal')">✕</button>
+            <h3 class="modal-title">ADD NEWS</h3>
+            <label class="modal-label">Headline</label>
+            <input type="text" id="newsHeadline" class="modal-input" placeholder="Breaking news headline">
+            <label class="modal-label">Story</label>
+            <textarea id="newsStory" class="modal-textarea" placeholder="Write the news story..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('news')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('newsModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal animate-in payment-modal">
+            <button class="modal-close" onclick="closeModal('paymentModal')">✕</button>
+            <h3 class="modal-title">SECURE CHECKOUT</h3>
+            <div class="payment-summary">
+                <span>Digital care package</span>
+                <strong>₹899</strong>
+            </div>
+            <div class="payment-methods">
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="card" checked>
+                    <span>Card</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="upi">
+                    <span>UPI</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="wallet">
+                    <span>Wallet</span>
+                </label>
+            </div>
+            <div class="coupon-entry">
+                <label class="modal-label" for="couponCode">Have a free coupon?</label>
+                <div class="link-display">
+                    <input type="text" id="couponCode" class="modal-input" placeholder="Enter coupon code" autocomplete="off">
+                    <button type="button" class="btn-preview" onclick="applyCoupon()">Apply</button>
+                </div>
+                <p class="copy-feedback" id="couponFeedback" style="display:none;"></p>
+            </div>
+            <div class="upi-qr-panel" id="upiQrPanel" style="display:none;">
+                <p class="modal-label">Scan to pay through UPI</p>
+                <div class="upi-qr-box" id="upiQrCode"></div>
+                <p class="upi-id">UPI ID: lilgoodies@upi</p>
+            </div>
+            <div class="payment-form" id="paymentForm">
+                <label class="modal-label">Cardholder name</label>
+                <input type="text" id="paymentName" class="modal-input" placeholder="Your name">
+                <label class="modal-label">Card number</label>
+                <input type="text" id="paymentCard" class="modal-input" placeholder="1234 5678 9012 3456">
+                <div class="payment-row">
+                    <div>
+                        <label class="modal-label">Expiry</label>
+                        <input type="text" id="paymentExpiry" class="modal-input" placeholder="MM/YY">
+                    </div>
+                    <div>
+                        <label class="modal-label">CVV</label>
+                        <input type="password" id="paymentCvv" class="modal-input" placeholder="123">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions payment-actions">
+                <button class="btn-cancel" onclick="closeModal('paymentModal')">Cancel</button>
+                <button class="btn-add" id="payButton" onclick="processPayment()">Pay ₹899</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Link Modal -->
+    <div class="modal-overlay" id="linkModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('linkModal')">✕</button>
+            <h3 class="modal-title">YOUR PACKAGE IS READY!</h3>
+            <p class="modal-label">Share this link with your special person:</p>
+            <div class="link-display">
+                <input type="text" id="generatedLink" class="modal-input" readonly>
+                <button class="btn-copy" onclick="copyLink()">Copy</button>
+            </div>
+            <p class="copy-feedback" id="copyFeedback" style="display:none;">Copied to clipboard! 💕</p>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="closeModal('linkModal')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>created by <span class="creator-name" id="creatorBadge">with love</span></p>
+        <p>made with a little box of goodies — <a href="#" class="make-own">make your own</a></p>
+        <button class="btn-admin" onclick="openAdminLogin()">Admin</button>
+    </footer>
+
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal animate-in admin-modal">
+            <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
+            <h3 class="modal-title">ADMIN ACCESS</h3>
+            <label class="modal-label">Username</label>
+            <input type="text" id="adminUsername" class="modal-input" placeholder="admin">
+            <label class="modal-label">Password</label>
+            <input type="password" id="adminPassword" class="modal-input" placeholder="Enter password">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('adminLoginModal')">Cancel</button>
+                <button class="btn-add" onclick="loginAdmin()">Enter dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminDashboardModal">
+        <div class="modal modal-large animate-in admin-dashboard-modal">
+            <button class="modal-close" onclick="closeModal('adminDashboardModal')">✕</button>
+            <h3 class="modal-title">LIL GOODIES DASHBOARD</h3>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <span>Total packages</span>
+                    <strong id="statTotalPackages">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Revenue</span>
+                    <strong id="statRevenue">₹0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Average items</span>
+                    <strong id="statAvgItems">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Creators</span>
+                    <strong id="statCreatorCount">1</strong>
+                </div>
+            </div>
+
+            <div class="admin-form-grid">
+                <div>
+                    <label class="modal-label">Creator name</label>
+                    <input type="text" id="adminCreatorName" class="modal-input">
+                </div>
+                <div>
+                    <label class="modal-label">Package price (₹)</label>
+                    <input type="number" id="adminPrice" class="modal-input" min="1">
+                </div>
+                <div>
+                    <label class="modal-label">UPI ID</label>
+                    <input type="text" id="adminUpiId" class="modal-input">
+                </div>
+                <div>
+                    <label class="modal-label">Admin note</label>
+                    <input type="text" id="adminNote" class="modal-input" placeholder="e.g. Family gift box campaign">
+                </div>
+            </div>
+
+            <div class="modal-actions dashboard-actions">
+                <button class="btn-cancel" onclick="closeModal('adminDashboardModal')">Close</button>
+                <button class="btn-add" onclick="saveAdminSettings()">Save settings</button>
+            </div>
+
+            <div class="recent-packages">
+                <h4>Recent packages</h4>
+                <div class="recent-table-wrap">
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>To</th>
+                                <th>From</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentPackagesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.5.3/qrcode.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>

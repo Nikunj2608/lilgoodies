@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You've Got Mail!</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+</head>
+<body class="preview-page">
+
+    <!-- Landing: Box View -->
+    <div class="landing-view" id="landingView">
+        <h1 class="mail-title">you've got mail</h1>
+        <div class="package-box" id="packageBox" onclick="openPackage()">
+            <div class="box-top" id="boxTop">
+                <div class="tape"></div>
+            </div>
+            <div class="box-body">
+                <div class="box-label">
+                    <div class="box-label-header">DIGITAL CARE PACKAGE</div>
+                    <div class="box-label-to">
+                        <small>TO:</small> <span id="boxTo">cutie</span>
+                    </div>
+                    <div class="box-label-stamp-mini">
+                        <span>to be delivered with</span>
+                        <span>care and love</span>
+                    </div>
+                    <div class="box-label-from">
+                        <small>FROM:</small> <span id="boxFrom">bestie</span>
+                    </div>
+                    <div class="box-label-barcode">
+                        <div class="barcode-lines-mini"></div>
+                        <span>9405 5118 9956 1891 2345 67</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="tap-text">tap to open</p>
+    </div>
+
+    <!-- Opened: Goodies View -->
+    <div class="goodies-view" id="goodiesView" style="display:none;">
+        <button class="btn-edit" id="editBtn" onclick="goToEdit()" style="display:none;">Edit package</button>
+        <h1 class="goodies-view-title">your little box of goodies</h1>
+        <div class="goodies-items" id="goodiesItems">
+            <!-- Items will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Item Detail Modals (for viewing) -->
+    <div class="modal-overlay" id="viewNoteModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewNoteModal')">✕</button>
+            <div class="note-paper">
+                <p id="viewNoteText"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="viewPhotoModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewPhotoModal')">✕</button>
+            <div class="photo-frame">
+                <img id="viewPhotoImg" src="" alt="Photo">
+                <p id="viewPhotoCaption" class="photo-caption"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="viewDrawingModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewDrawingModal')">✕</button>
+            <div class="drawing-frame">
+                <img id="viewDrawingImg" src="" alt="Drawing">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="viewCouponModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewCouponModal')">✕</button>
+            <div class="coupon-card">
+                <h3 id="viewCouponTitle"></h3>
+                <p id="viewCouponDesc"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="viewNewsModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewNewsModal')">✕</button>
+            <div class="news-card">
+                <h3 id="viewNewsHeadline"></h3>
+                <p id="viewNewsStory"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="viewLocationModal">
+        <div class="modal view-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewLocationModal')">✕</button>
+            <div class="location-card">
+                <h3 id="viewLocationName"></h3>
+                <p id="viewLocationAddress"></p>
+                <p id="viewLocationNote" class="location-note"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Player (floating) -->
+    <div class="voice-player" id="voicePlayer" style="display:none;">
+        <button class="voice-play-btn" id="voicePlayBtn" onclick="toggleVoicePlay()">▶</button>
+        <div class="voice-progress-container">
+            <div class="voice-progress" id="voiceProgress"></div>
+        </div>
+        <span class="voice-time" id="voiceTime">0:00 / 0:00</span>
+        <button class="voice-player-close" onclick="closeVoicePlayer()">✕</button>
+    </div>
+
+    <footer class="footer">
+        <p>created by <span class="creator-name" id="creatorName">from.collette</span></p>
+        <p>made with a little box of goodies — <a href="index.html" class="make-own">make your own</a></p>
+    </footer>
+
+    <script src="js/preview.js"></script>
+</body>
+</html>

@@ -1082,7 +1082,7 @@ function previewPackage() {
     updateFlowSteps(3);
     const previewUrl = new URL('preview.html', window.location.href);
     previewUrl.searchParams.set('preview', 'true');
-    window.open(previewUrl.href, '_blank');
+    window.location.href = previewUrl.href;
 }
 
 // ========== AUTO-SAVE ON INPUT ==========

@@ -1,9 +1,9 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
 
 function requireSupabase() {
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-        throw new Error('Supabase environment variables are not configured');
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+        throw new Error('Supabase URL and key environment variables are not configured');
     }
 }
 
@@ -12,8 +12,8 @@ async function supabaseRequest(path, options = {}) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
         ...options,
         headers: {
-            apikey: SUPABASE_SERVICE_ROLE_KEY,
-            Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
             'Content-Type': 'application/json',
             ...(options.headers || {})
         }

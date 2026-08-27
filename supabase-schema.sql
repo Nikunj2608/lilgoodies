@@ -14,3 +14,7 @@ alter table public.packages enable row level security;
 create policy "Public can read delivered packages"
 on public.packages for select
 using (status in ('paid', 'free'));
+
+create policy "Public can create free packages"
+on public.packages for insert
+with check (status = 'free');

@@ -97,6 +97,10 @@
                         <img class="item-icon" src="news.png" alt="" aria-hidden="true">
                         <span class="item-label">+ News</span>
                     </div>
+                    <div class="item-card" data-type="rakhi" role="button" tabindex="0" aria-label="Add virtual rakhi" onclick="openModal('rakhi')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('rakhi');}">
+                        <img class="item-icon" src="rakhi.png" alt="" aria-hidden="true">
+                        <span class="item-label">+ Virtual Rakhi</span>
+                    </div>
                 </div>
 
                 <div class="live-preview-panel" id="livePreviewPanel" aria-live="polite">
@@ -327,6 +331,20 @@
             <div class="modal-actions">
                 <button class="btn-add" onclick="addItem('news')">Add to package</button>
                 <button class="btn-cancel" onclick="closeModal('newsModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Virtual Rakhi Modal -->
+    <div class="modal-overlay" id="rakhiModal">
+        <div class="modal animate-in">
+            <button class="modal-close" onclick="closeModal('rakhiModal')">✕</button>
+            <h3 class="modal-title">VIRTUAL RAKHI</h3>
+            <label class="modal-label" for="rakhiMessage">Message for your brother</label>
+            <textarea id="rakhiMessage" class="modal-textarea" placeholder="Write a little love for your brother..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-add" onclick="addItem('rakhi')">Add to package</button>
+                <button class="btn-cancel" onclick="closeModal('rakhiModal')">Cancel</button>
             </div>
         </div>
     </div>

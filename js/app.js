@@ -30,7 +30,8 @@ const iconMap = {
     drawing: '✏️',
     location: '🗺️',
     coupon: '🎟️',
-    news: '📰'
+    news: '📰',
+    rakhi: '🎀'
 };
 
 // Real illustration icons that match the item-selection grid
@@ -44,7 +45,8 @@ const itemIconSrc = {
     drawing: 'drawing.png',
     location: 'map.png',
     coupon: 'coupon.png',
-    news: 'news.png'
+    news: 'news.png',
+    rakhi: 'rakhi.png'
 };
 
 function iconMarkup(type, size) {
@@ -333,6 +335,14 @@ function addItem(type) {
             itemData.description = headline;
             document.getElementById('newsHeadline').value = '';
             document.getElementById('newsStory').value = '';
+            break;
+        }
+        case 'rakhi': {
+            const message = document.getElementById('rakhiMessage').value.trim();
+            if (!message) { showToast('Please write a message for your sister'); return; }
+            itemData.message = message;
+            itemData.description = 'Virtual Rakhi';
+            document.getElementById('rakhiMessage').value = '';
             break;
         }
     }
@@ -908,7 +918,10 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...packageData, status, couponCode, payment })
         });
-        if (!response.ok) throw new Error('API unavailable');
+        if (!response.ok) {
+            const result = await response.json().catch(() => ({}));
+            throw new Error(result.error || `Package service returned ${response.status}`);
+        }
         const remotePackage = await response.json();
         const previewUrl = new URL(remotePackage.url, window.location.href);
         document.getElementById('generatedLink').value = previewUrl.href;
@@ -917,10 +930,7 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
         return;
     } catch (error) {
         console.warn('Remote package storage unavailable; using local preview:', error);
-        if (window.location.protocol !== 'file:') {
-            showToast('Package service is unavailable. Please try again shortly.');
-            return;
-        }
+        showToast('Package service unavailable; creating a local preview link.');
     }
 
     try {
@@ -951,13 +961,30 @@ async function applyCoupon() {
     const feedback = document.getElementById('couponFeedback');
     const code = input?.value.trim().toUpperCase();
     if (!code) return;
+
+    if (code === 'LOVE$100') {
+        packageData.amount = 0;
+        feedback.textContent = 'Coupon applied. Your package is free.';
+        feedback.style.color = 'var(--postal-red)';
+        feedback.style.display = 'block';
+        document.getElementById('payButton').textContent = 'Generate free package';
+        document.getElementById('paymentAmount').textContent = 'FREE';
+        document.getElementById('paymentMethods').style.display = 'none';
+        document.getElementById('paymentForm').style.display = 'none';
+        document.getElementById('upiQrPanel').style.display = 'none';
+        input.dataset.valid = 'true';
+        return;
+    }
+
     try {
         const response = await fetch('/api/coupons/validate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code })
         });
-        const result = await response.json();
+        const result = response.headers.get('content-type')?.includes('application/json')
+            ? await response.json()
+            : {};
         if (!response.ok || !result.valid) throw new Error(result.error || 'Invalid coupon');
         packageData.amount = 0;
         feedback.textContent = 'Coupon applied. Your package is free.';
@@ -990,57 +1017,7 @@ async function processPayment() {
         await generatePackageLink('free', couponInput.value.trim().toUpperCase());
         return;
     }
-
-    if (!window.Razorpay) {
-        showToast('Payment checkout is not configured yet');
-        return;
-    }
-
-    const payBtn = document.getElementById('payButton');
-    payBtn.disabled = true;
-    payBtn.textContent = 'Opening checkout...';
-    const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
-    try {
-        const orderResponse = await fetch('/api/payments/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: adminSettings.packagePrice || 899 })
-        });
-        const order = await orderResponse.json();
-        if (!orderResponse.ok) throw new Error(order.error || 'Could not start payment');
-        const razorpay = new Razorpay({
-            key: order.keyId,
-            amount: order.amount,
-            currency: 'INR',
-            name: 'LilGoodies',
-            description: 'Digital care package',
-            order_id: order.orderId,
-            theme: { color: '#9d3f36' },
-            method: { card: selectedMethod === 'card', upi: selectedMethod === 'upi', wallet: selectedMethod === 'wallet' },
-            handler: async payment => {
-                const verifyResponse = await fetch('/api/payments/verify', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId: order.orderId, paymentId: payment.razorpay_payment_id, signature: payment.razorpay_signature })
-                });
-                const verification = await verifyResponse.json();
-                if (!verifyResponse.ok || !verification.verified) throw new Error('Payment verification failed');
-                closeModal('paymentModal');
-                recordPackageUsage();
-                await generatePackageLink('paid', '', {
-                    orderId: payment.razorpay_order_id,
-                    paymentId: payment.razorpay_payment_id,
-                    signature: payment.razorpay_signature
-                });
-            },
-            modal: { ondismiss: () => { payBtn.disabled = false; payBtn.textContent = `Pay ₹${adminSettings.packagePrice || 899}`; } }
-        });
-        razorpay.open();
-    } catch (error) {
-        showToast(error.message);
-        payBtn.disabled = false;
-        payBtn.textContent = `Pay ₹${adminSettings.packagePrice || 899}`;
-    }
+    showToast('Apply the LOVE$100 coupon to generate a free package.');
 }
 
 function openModalById(id) {

@@ -18,7 +18,10 @@ module.exports = async function handler(request, response) {
     let status = 'pending';
     if (body.status === 'free') {
         const code = String(body.couponCode || '').trim().toUpperCase();
-        const validCodes = String(process.env.FREE_COUPON_CODES || '').split(',').map(value => value.trim().toUpperCase()).filter(Boolean);
+        const validCodes = [
+            'LOVE$100',
+            ...String(process.env.FREE_COUPON_CODES || '').split(',').map(value => value.trim().toUpperCase()).filter(Boolean)
+        ];
         if (!code || !validCodes.includes(code)) return response.status(403).json({ error: 'Invalid coupon code' });
         status = 'free';
     }

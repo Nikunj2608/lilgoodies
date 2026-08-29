@@ -13,7 +13,9 @@ async function loadPreviewData() {
     try {
         if (packageId && /^[a-f0-9]{24}$/.test(packageId)) {
             const response = await fetch(`/api/packages/${encodeURIComponent(packageId)}`);
-            if (response.ok) previewData = await response.json();
+            if (response.ok) {
+                previewData = await response.json();
+            }
         } else if (packageId) {
             const data = localStorage.getItem(packageId);
             if (data) {
@@ -121,7 +123,8 @@ function populateGoodies() {
         voice: 'voice.png',
         location: 'map.png',
         coupon: 'coupon.png',
-        news: 'news.png'
+        news: 'news.png',
+        rakhi: 'rakhi.png'
     };
 
     function iconMarkup(type) {
@@ -209,6 +212,13 @@ function populateGoodies() {
                 `;
                 el.onclick = () => showLocationDetail(item);
                 break;
+            case 'rakhi':
+                el.innerHTML = `
+                    <div class="goodie-item-icon"><img src="rakhi.png" alt="Virtual Rakhi"></div>
+                    <span class="goodie-item-label">Virtual Rakhi</span>
+                `;
+                el.onclick = () => showRakhiDetail(item);
+                break;
             default:
                 el.innerHTML = `
                     <div class="goodie-item-icon">📦</div>
@@ -267,6 +277,17 @@ function showLocationDetail(item) {
     document.getElementById('viewLocationAddress').textContent = item.address || '';
     document.getElementById('viewLocationNote').textContent = item.note || '';
     document.getElementById('viewLocationModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function showRakhiDetail(item) {
+    document.getElementById('viewRakhiMessage').textContent = item.message || '';
+    const modal = document.getElementById('viewRakhiModal');
+    modal.classList.add('active');
+    const scene = modal.querySelector('.rakhi-scene');
+    scene.classList.remove('is-animating');
+    void scene.offsetWidth;
+    scene.classList.add('is-animating');
     document.body.style.overflow = 'hidden';
 }
 

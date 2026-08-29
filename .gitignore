@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+
+# Local development and editor files
+.vercel
+.vscode/*.local.json
+
+# Logs and generated files
+*.log
+npm-debug.log*

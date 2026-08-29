@@ -1535,6 +1535,46 @@ button:active { transform: translateY(0); }
 .goodie-item-photo, .goodie-item-drawing { border-color: #fff; box-shadow: 2px 3px 10px rgba(60, 40, 30, 0.12); }
 .goodie-item-icon img { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(1px 3px 3px rgba(40, 30, 20, 0.16)); }
 
+/* Virtual Rakhi ceremony */
+.rakhi-modal { width: min(760px, calc(100vw - 32px)); max-width: 760px; }
+.rakhi-scene {
+    min-height: 390px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 85%, rgba(224, 166, 91, 0.2), transparent 48%), #fffaf1;
+    border: 1px solid rgba(157, 63, 54, 0.16);
+    border-radius: 10px;
+}
+.rakhi-thali { position: absolute; width: 190px; right: 20px; top: 50%; transform: translateY(-50%) rotate(7deg); filter: drop-shadow(4px 8px 8px rgba(69, 39, 24, 0.18)); }
+.rakhi-hands { position: absolute; width: min(72%, 430px); height: 220px; object-fit: contain; left: 50%; bottom: -10px; transform: translateX(-50%); filter: drop-shadow(2px 5px 5px rgba(69, 39, 24, 0.16)); }
+.rakhi-thread { position: absolute; width: 280px; height: 280px; object-fit: contain; left: 50%; top: -180px; transform: translateX(-50%); filter: drop-shadow(2px 4px 4px rgba(69, 39, 24, 0.2)); }
+.rakhi-scene.is-animating .rakhi-thread { animation: rakhiDescend 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.rakhi-message-wrap { margin-top: 18px; padding: 16px 20px; background: #fffdf8; border: 1px dashed rgba(157, 63, 54, 0.3); text-align: left; }
+.rakhi-message-label { color: var(--postal-red); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.rakhi-message-wrap p { margin: 8px 0 0; color: var(--ink); font-family: var(--font-elegant); font-size: 1.15rem; line-height: 1.6; white-space: pre-wrap; }
+
+@keyframes rakhiDescend {
+    0% { top: -180px; opacity: 0; transform: translateX(-50%) rotate(-12deg); }
+    18% { opacity: 1; }
+    72% { top: 150px; transform: translateX(-50%) rotate(8deg); }
+    86% { top: 132px; transform: translateX(-50%) rotate(-4deg); }
+    100% { top: 110px; opacity: 1; transform: translateX(-50%) rotate(0deg); }
+}
+
+@media (max-width: 560px) {
+    .rakhi-scene { min-height: 330px; }
+    .rakhi-thali { width: 112px; right: -8px; top: 42%; }
+    .rakhi-hands { width: 92%; height: 180px; bottom: -8px; }
+    .rakhi-thread { width: 130px; height: 130px; }
+    @keyframes rakhiDescend {
+        0% { top: -140px; opacity: 0; transform: translateX(-50%) rotate(-12deg); }
+        18% { opacity: 1; }
+        72% { top: 112px; transform: translateX(-50%) rotate(8deg); }
+        86% { top: 98px; transform: translateX(-50%) rotate(-4deg); }
+        100% { top: 108px; opacity: 1; transform: translateX(-50%) rotate(0deg); }
+    }
+}
+
 /* Real item icons used inside cart / live preview (replaces emoji) */
 .cart-item-icon { display: inline-flex; align-items: center; justify-content: center; }
 .cart-item-icon .type-icon { display: block; }

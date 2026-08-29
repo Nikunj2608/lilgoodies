@@ -108,6 +108,21 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="viewRakhiModal">
+        <div class="modal view-modal rakhi-modal animate-in">
+            <button class="modal-close" onclick="closeViewModal('viewRakhiModal')">✕</button>
+            <div class="rakhi-scene" aria-label="A virtual rakhi ceremony">
+                <img class="rakhi-thali" src="pujathali.png" alt="Puja thali">
+                <img class="rakhi-hands" src="hand.svg" alt="Hand waiting to receive the rakhi">
+                <img class="rakhi-thread" src="rakhi.svg" alt="Rakhi being tied">
+            </div>
+            <div class="rakhi-message-wrap">
+                <span class="rakhi-message-label">A message for you</span>
+                <p id="viewRakhiMessage"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Voice Player (floating) -->
     <div class="voice-player" id="voicePlayer" style="display:none;">
         <button class="voice-play-btn" id="voicePlayBtn" onclick="toggleVoicePlay()">▶</button>

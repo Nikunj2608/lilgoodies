@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const { supabaseRequest } = require('../_lib/supabase');
+const { resolvePublicOrigin } = require('../_lib/public-url');
 
 function packageId() {
     return crypto.randomBytes(12).toString('hex');
@@ -70,7 +71,9 @@ module.exports = async function handler(request, response) {
                 coupon_code: body.couponCode || null
             })
         });
-        return response.status(201).json({ id, shareId: shareSlug, url: `/preview.html?id=${shareSlug}` });
+        const sharePath = `/preview.html?id=${shareSlug}`;
+        const shareUrl = `${resolvePublicOrigin(request)}${sharePath}`;
+        return response.status(201).json({ id, shareId: shareSlug, url: sharePath, shareUrl });
     } catch (error) {
         console.error(error);
         return response.status(500).json({ error: 'Could not create package' });

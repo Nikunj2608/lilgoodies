@@ -919,14 +919,18 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
             throw new Error(result.error || `Package service returned ${response.status}`);
         }
         const remotePackage = await response.json();
-        const previewUrl = new URL(remotePackage.url, window.location.href);
+        const previewUrl = new URL(remotePackage.shareUrl || remotePackage.url, window.location.href);
         document.getElementById('generatedLink').value = previewUrl.href;
         openModalById('linkModal');
         updateFlowSteps(4);
         return;
     } catch (error) {
         console.warn('Remote package storage unavailable; using local preview:', error);
-        showToast('Package service unavailable; creating a local preview link.');
+        if (!isLocalDevelopment()) {
+            showToast('Could not save package. Please check database setup and try again.');
+            return;
+        }
+        showToast('Package service unavailable; creating a local preview link for local testing.');
     }
 
     try {
@@ -944,6 +948,11 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
         previewUrl.searchParams.set('id', fallbackId);
         document.getElementById('generatedLink').value = previewUrl.href;
         openModalById('linkModal');
+    }
+
+    function isLocalDevelopment() {
+        const hostname = window.location.hostname;
+        return window.location.protocol === 'file:' || hostname === 'localhost' || hostname === '127.0.0.1';
     }
 }
 

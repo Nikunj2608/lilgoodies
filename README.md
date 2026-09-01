@@ -93,9 +93,10 @@ The project includes lightweight Vercel serverless functions in `api/` for packa
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-server-only-key
 SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+PUBLIC_APP_URL=https://your-production-domain.example
 RAZORPAY_KEY_ID=your-key-id
 RAZORPAY_KEY_SECRET=your-server-only-secret
 FREE_COUPON_CODES=FIRSTPACKAGE,FRIENDPASS
 ```
 
-`LOVE$100` is always available; `FREE_COUPON_CODES` adds more free codes. Prefer `SUPABASE_SERVICE_ROLE_KEY` in production. Never expose it or `RAZORPAY_KEY_SECRET` in HTML or browser JavaScript. After deployment, packages are available at `preview.html?id=<package-id>` and can be opened from any device.
+`LOVE$100` is always available; `FREE_COUPON_CODES` adds more free codes. Prefer `SUPABASE_SERVICE_ROLE_KEY` in production. Never expose it or `RAZORPAY_KEY_SECRET` in HTML or browser JavaScript. Set `PUBLIC_APP_URL` to your final public domain so generated links always open without Vercel preview login prompts. After deployment, packages are available at `preview.html?id=<package-id>` and can be opened from any device.

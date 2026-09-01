@@ -1,5 +1,6 @@
 create table public.packages (
     id text primary key,
+    share_slug text not null unique,
     recipient text not null,
     sender text not null,
     items jsonb not null,

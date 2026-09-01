@@ -11,15 +11,22 @@ async function loadPreviewData() {
     const isPreview = params.get('preview');
     
     try {
-        if (packageId && /^[a-f0-9]{24}$/.test(packageId)) {
-            const response = await fetch(`/api/packages/${encodeURIComponent(packageId)}`);
-            if (response.ok) {
-                previewData = await response.json();
-            }
-        } else if (packageId) {
-            const data = localStorage.getItem(packageId);
-            if (data) {
-                previewData = JSON.parse(data);
+        if (packageId) {
+            if (/^[a-f0-9]{24}$/.test(packageId)) {
+                const response = await fetch(`/api/packages/${encodeURIComponent(packageId)}`);
+                if (response.ok) {
+                    previewData = await response.json();
+                } else {
+                    const data = localStorage.getItem(packageId);
+                    if (data) {
+                        previewData = JSON.parse(data);
+                    }
+                }
+            } else {
+                const data = localStorage.getItem(packageId);
+                if (data) {
+                    previewData = JSON.parse(data);
+                }
             }
         }
         

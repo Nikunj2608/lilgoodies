@@ -817,11 +817,7 @@ function resetVoiceInput() {
 }
 
 function generatePackageId() {
-    const recipient = (packageData.to || 'friend').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 20) || 'friend';
-    const sender = (packageData.from || 'someone').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 10) || 'sender';
-    const stamp = Date.now().toString(36);
-    const seed = Math.random().toString(36).slice(2, 8);
-    return `${recipient}-${sender}-${stamp}-${seed}`;
+    return crypto.randomUUID().replace(/-/g, '').slice(0, 24);
 }
 
 function openAdminLogin() {

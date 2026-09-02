@@ -1,8 +1,25 @@
 const crypto = require('crypto');
 const { supabaseRequest } = require('../_lib/supabase');
+const { resolvePublicOrigin } = require('../_lib/public-url');
 
 function packageId() {
     return crypto.randomBytes(12).toString('hex');
+}
+
+function slugPart(value, fallback) {
+    const normalized = String(value || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 24);
+    return normalized || fallback;
+}
+
+function packageShareSlug(recipient, sender) {
+    const to = slugPart(recipient, 'friend');
+    const from = slugPart(sender, 'someone');
+    const suffix = crypto.randomBytes(4).toString('hex');
+    return `${to}-from-${from}-${suffix}`;
 }
 
 module.exports = async function handler(request, response) {
@@ -35,22 +52,28 @@ module.exports = async function handler(request, response) {
         status = 'paid';
     }
 
+    const recipient = String(body.to).slice(0, 120);
+    const sender = String(body.from).slice(0, 120);
     const id = packageId();
+    const shareSlug = packageShareSlug(recipient, sender);
     try {
         await supabaseRequest('packages', {
             method: 'POST',
             headers: { Prefer: 'return=minimal' },
             body: JSON.stringify({
                 id,
-                recipient: String(body.to).slice(0, 120),
-                sender: String(body.from).slice(0, 120),
+                share_slug: shareSlug,
+                recipient,
+                sender,
                 items: body.items,
                 amount: Number(body.amount || 0),
                 status,
                 coupon_code: body.couponCode || null
             })
         });
-        return response.status(201).json({ id, url: `/preview.html?id=${id}` });
+        const sharePath = `/preview.html?id=${shareSlug}`;
+        const shareUrl = `${resolvePublicOrigin(request)}${sharePath}`;
+        return response.status(201).json({ id, shareId: shareSlug, url: sharePath, shareUrl });
     } catch (error) {
         console.error(error);
         return response.status(500).json({ error: 'Could not create package' });

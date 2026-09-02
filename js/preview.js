@@ -11,26 +11,16 @@ async function loadPreviewData() {
     const isPreview = params.get('preview');
     
     try {
-        if (packageId) {
-            if (/^[a-f0-9]{24}$/.test(packageId)) {
-                const response = await fetch(`/api/packages/${encodeURIComponent(packageId)}`);
-                if (response.ok) {
-                    previewData = await response.json();
-                } else {
-                    const data = localStorage.getItem(packageId);
-                    if (data) {
-                        previewData = JSON.parse(data);
-                    }
-                }
+        if (packageId && /^[a-f0-9]{24}$/.test(packageId)) {
+            const response = await fetch(`/api/packages/${encodeURIComponent(packageId)}`, {
+                cache: 'no-store'
+            });
+            if (response.ok) {
+                previewData = await response.json();
             } else {
-                const data = localStorage.getItem(packageId);
-                if (data) {
-                    previewData = JSON.parse(data);
-                }
+                throw new Error(`Package service returned ${response.status}`);
             }
-        }
-        
-        if (!previewData && isPreview) {
+        } else if (!packageId && isPreview) {
             const data = localStorage.getItem('carePackage');
             if (data) {
                 previewData = JSON.parse(data);
@@ -53,7 +43,7 @@ async function loadPreviewData() {
         console.warn('Could not load creator name:', e);
     }
     
-    if (!previewData) {
+    if (!previewData && !packageId) {
         // Demo data
         previewData = {
             to: 'cutie',
@@ -63,6 +53,12 @@ async function loadPreviewData() {
                 { type: 'drawing', src: createDemoDrawing(), description: 'hand drawing', id: 2 }
             ]
         };
+    }
+
+    if (!previewData) {
+        document.getElementById('boxTo').textContent = 'package unavailable';
+        document.getElementById('boxFrom').textContent = 'please try again later';
+        return;
     }
     
     // Update box label

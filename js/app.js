@@ -925,25 +925,8 @@ async function generatePackageLink(status = 'paid', couponCode = '', payment = n
         updateFlowSteps(4);
         return;
     } catch (error) {
-        console.warn('Remote package storage unavailable; using local preview:', error);
-        showToast('Package service unavailable; creating a local preview link.');
-    }
-
-    try {
-        const packageId = generatePackageId();
-        localStorage.setItem(packageId, JSON.stringify(packageData));
-        const previewUrl = new URL('preview.html', window.location.href);
-        previewUrl.searchParams.set('id', packageId);
-        document.getElementById('generatedLink').value = previewUrl.href;
-        openModalById('linkModal');
-    } catch (e) {
-        console.warn('Storage full, using fallback package key');
-        const fallbackId = 'carePackage';
-        localStorage.setItem(fallbackId, JSON.stringify(packageData));
-        const previewUrl = new URL('preview.html', window.location.href);
-        previewUrl.searchParams.set('id', fallbackId);
-        document.getElementById('generatedLink').value = previewUrl.href;
-        openModalById('linkModal');
+        console.error('Could not store package in Supabase:', error);
+        showToast('Could not create the shared link. Check the live API setup and try again.');
     }
 }
 

@@ -13,6 +13,7 @@ module.exports = async function handler(request, response) {
     try {
         const rows = await supabaseRequest(`packages?id=eq.${id}&status=in.(paid,free)&select=recipient,sender,items,created_at`);
         if (!rows.length) return response.status(404).json({ error: 'Package not found' });
+        response.setHeader('Cache-Control', 'no-store, max-age=0');
         return response.status(200).json({ to: rows[0].recipient, from: rows[0].sender, items: rows[0].items, createdAt: rows[0].created_at });
     } catch (error) {
         console.error(error);
